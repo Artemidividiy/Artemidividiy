@@ -1,3 +1,4 @@
 {
-    "codeforces_user_rating" : "https://codeforces.com/api/user.rating?handle=uselessXIV"
+    "codeforces_user_rating" : "https://codeforces.com/api/user.rating?handle=uselessXIV",
+    "github_auth_token" : "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"
 }

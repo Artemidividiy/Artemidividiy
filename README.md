@@ -17,8 +17,10 @@
 - 😄 Pronouns: he/decepticon
 - ⚡ Fun fact: ...
 
-[![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](http://shields.io/)
-
 [![Ryo-ma's github trophy](https://github-profile-trophy.vercel.app/?username=Artemidividiy&row=1)](https://github.com/ryo-ma/github-profile-trophy)
 <!-- codeforces starts--> 
 <!-- codeforces ends -->
+---
+<!-- recent_releases starts -->
+* [CodeHunter test release](https://github.com/vbelovitsky/CodeHunter/releases/tag/v1.1) - 2019-07-05
+<!-- recent_releases ends -->
