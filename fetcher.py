@@ -12,11 +12,10 @@ import pathlib
 import re
 import os
 
-json_constants = open("./constants.json")
-console = Console()
 def get_last_cf():
     try:
-        r = requests.get(json.load(json_constants)["codeforces_user_rating"])
+        f = open("./constants.json")
+        r = requests.get(json.load(f)["codeforces_user_rating"])
         return str(r.json()['result'][-1]['newRating'])
     finally:
         pass
@@ -26,6 +25,10 @@ def fetch_writing():
 
 root = pathlib.Path(__file__).parent.resolve()
 client = GraphqlClient(endpoint="https://api.github.com/graphql")
+
+
+TOKEN = "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"
+
 
 def replace_chunk(content, marker, chunk):
     r = re.compile(
@@ -38,50 +41,30 @@ def replace_chunk(content, marker, chunk):
 
 def make_query(after_cursor=None):
     return """
-query 
-  {
-  user(login: "Artemidividiy") {
-    repositoriesContributedTo(
-      last: 5
-      contributionTypes: [COMMIT, ISSUE, PULL_REQUEST, PULL_REQUEST_REVIEW, REPOSITORY]
-      includeUserRepositories: true
-    ) {
+query {
+  viewer {
+    repositories(first: 100, privacy: PUBLIC, after:AFTER) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
       nodes {
         name
-        ... on Repository {
-          defaultBranchRef {
-            target {
-              ... on Commit {
-                history(first: 3, author: {id: "MDQ6VXNlcjQ0NDQ3Nzk4"}) {
-                  edges {
-                    node {
-                      ... on Commit {
-                        message
-                        committedDate
-                        committer {
-                          date
-                          email
-                          name
-                        }
-                      }
-                    }
-                  }
-                  totalCount
-                }
-              }
-            }
+        releases(last:1) {
+          totalCount
+          nodes {
+            name
+            publishedAt
+            url
           }
         }
       }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
-      totalCount
     }
   }
 }
-"""
+""".replace(
+        "AFTER", '"{}"'.format(after_cursor) if after_cursor else "null"
+    )
 
 
 def fetch_releases(oauth_token):
@@ -97,11 +80,10 @@ def fetch_releases(oauth_token):
             headers={"Authorization": "Bearer {}".format(oauth_token)},
         )
         print()
-        print(data)
-        # print(json.dumps(data, indent=4))
+        print(json.dumps(data, indent=4))
         print()
-        for repo in data["data"]["user"]["repositoriesContributedTo"]["nodes"]:
-            if repo["name"]["totalCount"] and repo["name"] not in repo_names:
+        for repo in data["data"]["viewer"]["repositories"]["nodes"]:
+            if repo["releases"]["totalCount"] and repo["name"] not in repo_names:
                 repos.append(repo)
                 repo_names.add(repo["name"])
                 releases.append(
@@ -124,9 +106,12 @@ def fetch_releases(oauth_token):
 
 
 
+
+
 if __name__ == "__main__":
     readme = root / "README.md"
-    releases = fetch_releases(json.load(json_constants)["github_auth_token"])
+    cf = get_last_cf()
+    releases = fetch_releases(TOKEN)
     releases.sort(key=lambda r: r["published_at"], reverse=True)
     md = "\n".join(
         [
@@ -136,7 +121,8 @@ if __name__ == "__main__":
     )
     readme_contents = readme.open().read()
     rewritten = replace_chunk(readme_contents, "recent_releases", md)
+    rewritten = replace_chunk(readme_contents, "codeforces", md)
     readme.open("w").write(rewritten)
-
 # if __name__ == "__main__":
 #     print(get_last_cf())
+#     replace_chunk(marker="codeforces", content=open("README.md"), chunk=get_last_cf(), inline=True)
