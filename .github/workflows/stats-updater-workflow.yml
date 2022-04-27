@@ -28,7 +28,7 @@ jobs:
         python -m pip install -r requirements.txt
     - name: Update README
       env:
-        github_auth_token: ${{ secrets.github_auth_token }}
+        github_auth_token: ${{ secrets.gh_auth_token }}
       run: |-
         python fetcher.py
         cat README.md
