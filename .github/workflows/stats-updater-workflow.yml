@@ -30,7 +30,7 @@ jobs:
       env:
         github_auth_token: ${{ secrets.github_auth_token }}
       run: |-
-        python build_readme.py
+        python fetcher.py
         cat README.md
     - name: Commit and push if README changed
       run: |-
