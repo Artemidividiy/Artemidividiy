@@ -108,6 +108,7 @@ def fetch_releases(oauth_token):
 
 if __name__ == "__main__":
     readme = root / "README.md"
+    print(GH_TOKEN)
     cf = get_last_cf()
     GH_releases = fetch_releases(GH_TOKEN)
     GH_releases.sort(key=lambda r: r["published_at"], reverse=True)
