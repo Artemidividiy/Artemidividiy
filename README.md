@@ -12,6 +12,8 @@
 
 <!-- - 👯 I’m looking to collaborate on ... -->
 - 📫 How to reach me: 
+  - telegram: @X_I_V
+  - email: artemiy.kasyanik@gmail.com
 - 😄 Pronouns: he/decepticon
 - ⚡ Fun fact: ...
 ---
@@ -22,8 +24,7 @@
 [![Ryo-ma's github trophy](https://github-profile-trophy.vercel.app/?username=Artemidividiy&row=1)](https://github.com/ryo-ma/github-profile-trophy)
 [![Artemidividiy's github stats](https://github-readme-stats.vercel.app/api?username=Artemidividiy&theme=cobalt)](https://github.com/anuraghazra/github-readme-stats)
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=Artemidividiy&layout=compact)](https://github.com/anuraghazra/github-readme-stats)
-<!-- codeforces starts--> 
-<!-- codeforces ends -->
+
 ---
 ### Recent releases
 <!-- recent_releases starts -->

@@ -4,18 +4,17 @@ import re
 import json
 from rich.console import Console
 from python_graphql_client import GraphqlClient
-
-import feedparser
-import httpx
 import json
 import pathlib
 import re
 import os
 
+CF_TOKEN = "https://codeforces.com/api/user.rating?handle=uselessXIV"
+GH_TOKEN = os.environ.get("github_auth_token", "")
+
 def get_last_cf():
     try:
-        f = open("./constants.json")
-        r = requests.get(json.load(f)["codeforces_user_rating"])
+        r = requests.get(CF_TOKEN)
         return str(r.json()['result'][-1]['newRating'])
     finally:
         pass
@@ -27,7 +26,6 @@ root = pathlib.Path(__file__).parent.resolve()
 client = GraphqlClient(endpoint="https://api.github.com/graphql")
 
 
-TOKEN = "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"
 
 
 def replace_chunk(content, marker, chunk):
@@ -111,18 +109,15 @@ def fetch_releases(oauth_token):
 if __name__ == "__main__":
     readme = root / "README.md"
     cf = get_last_cf()
-    releases = fetch_releases(TOKEN)
-    releases.sort(key=lambda r: r["published_at"], reverse=True)
+    GH_releases = fetch_releases(GH_TOKEN)
+    GH_releases.sort(key=lambda r: r["published_at"], reverse=True)
     md = "\n".join(
         [
             "* [{repo} {release}]({url}) - {published_at}".format(**release)
-            for release in releases[:5]
+            for release in GH_releases[:5]
         ]
     )
     readme_contents = readme.open().read()
     rewritten = replace_chunk(readme_contents, "recent_releases", md)
-    rewritten = replace_chunk(readme_contents, "codeforces", md)
+    rewritten = replace_chunk(readme_contents, "codeforces", cf)
     readme.open("w").write(rewritten)
-# if __name__ == "__main__":
-#     print(get_last_cf())
-#     replace_chunk(marker="codeforces", content=open("README.md"), chunk=get_last_cf(), inline=True)
