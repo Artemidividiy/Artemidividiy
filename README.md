@@ -14,7 +14,6 @@
 - 📫 How to reach me: 
   - telegram: @X_I_V
   - email: artemiy.kasyanik@gmail.com
-- 😄 Pronouns: he/decepticon
 - ⚡ Fun fact: ...
 ---
 ### Some stats
